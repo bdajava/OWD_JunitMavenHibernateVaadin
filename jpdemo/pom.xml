@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ##################################################################################################### -->
+
+    <groupId>org.jpwh</groupId>
+    <artifactId>jpwh</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- ##################################################################################################### -->
+
+    <name>jpdemo</name>
+    <url>http://jpwh.org//</url>
+    <developers>
+        <developer>
+            <email>jpwh@christianbauer.name</email>
+        </developer>
+        <developer>
+            <email>garydgregory@gmail.com</email>
+        </developer>
+    </developers>
+
+    <!-- ##################################################################################################### -->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+
+        <!-- The standardized API -->
+        <hibernate.jpa21.api.version>1.0.0.Final</hibernate.jpa21.api.version>
+
+        <!-- Hibernate's implementation -->
+        <hibernate.version>4.3.0.Final</hibernate.version>
+
+        <!-- The standardized Bean Validation API -->
+        <validation.api.version>1.0.0.GA</validation.api.version>
+
+        <!-- Hibernate's implementation -->
+        <hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
+
+        <!-- Original Hibernate toolset, someone should update this -->
+        <hibernate.tools.version>3.2.4.GA</hibernate.tools.version>
+        <!-- Maven wrapper for the original Hibernate toolset -->
+        <hibernate3.maven.plugin.version>2.2</hibernate3.maven.plugin.version>
+        <!-- New JPA 2 metamodel support tool -->
+        <hibernate.jpamodelgen.version>1.3.0.Final</hibernate.jpamodelgen.version>
+
+        <!-- Everyone's favorite -->
+        <slf4j.impl.version>1.6.1</slf4j.impl.version>
+
+        <!-- For small scale deployment, use the H2 RDBMS, all Java -->
+        <h2.version>1.4.182</h2.version>
+
+        <!-- In Java SE you should use a JTA transaction manager as a JDBC connection pool, Bitronix is good -->
+        <btm.version>2.1.3</btm.version>
+
+        <!-- Integration testing with TestNG is easier than JUnit -->
+        <testng.version>6.8.5</testng.version>
+
+        <!-- Java EE 7 API for the application examples-->
+        <javaee-api.version>7.0</javaee-api.version>
+
+        <!-- Application examples integration testing with Java EE environment -->
+        <shrinkwrap.version>2.0.0</shrinkwrap.version>
+        <arquillian.version>1.1.1.Final</arquillian.version>
+        <wildfly.version>8.0.0.Alpha4</wildfly.version>
+
+        <!-- TODO Wildfly! JBoss AS deployment plugin for Maven -->
+        <jboss.as7.maven-plugin.version>7.2.0.Final</jboss.as7.maven-plugin.version>
+
+    </properties>
+
+    <!-- ##################################################################################################### -->
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+
+                <!-- Maven-wrapper for Hibernate toolset -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>hibernate3-maven-plugin</artifactId>
+                    <version>${hibernate3.maven.plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-entitymanager</artifactId>
+                            <version>${hibernate.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-validator</artifactId>
+                            <version>${hibernate.validator.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-tools</artifactId>
+                            <version>${hibernate.tools.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.10</version>
+                    <configuration>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        <systemPropertyVariables>
+                            <derby.stream.error.field>java.lang.System.err</derby.stream.error.field>
+                            <java.util.logging.config.file>../shared/src/main/resources/logging.properties</java.util.logging.config.file>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+
+                <!-- For the application examples, we need WAR packaging -->
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.1.1</version>
+                    <configuration>
+                        <!-- WARs no longer have this file in 2012 -->
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <!-- Without the version number -->
+                        <warName>${project.artifactId}</warName>
+                    </configuration>
+                </plugin>
+
+                <!-- We want to disable Maven deployment for some modules -->
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+
+
+            </plugins>
+
+        </pluginManagement>
+
+    </build>
+
+    <!-- ##################################################################################################### -->
+
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+    </reporting>
+
+    <!-- ##################################################################################################### -->
+
+    <profiles>
+
+        <profile>
+            <id>examples</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>shared</module>
+                <module>environment</module>
+                <module>helloworld</module>
+                <module>model</module>
+                <module>examples</module>
+            </modules>
+        </profile>
+
+    </profiles>
+
+</project>
