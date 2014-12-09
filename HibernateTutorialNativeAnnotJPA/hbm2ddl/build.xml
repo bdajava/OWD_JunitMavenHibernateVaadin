@@ -1,0 +1,18 @@
+<target name="schemaexport">
+    <taskdef name="schemaexport"
+        classname="org.hibernate.tool.hbm2ddl.SchemaExportTask"
+        classpathref="class.path"/>
+    
+    <schemaexport
+        properties="hibernate.properties"
+        quiet="no"
+        text="no"
+        drop="no"
+        delimiter=";"
+        output="schema-export.sql">
+        <fileset dir="src">
+            <include name="**/*.hbm.xml"/>
+        </fileset>
+    </schemaexport>
+</target>
+
