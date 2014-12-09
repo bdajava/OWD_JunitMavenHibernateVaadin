@@ -1,0 +1,61 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    
+<!--
+    javax.persistence.PersistenceException: No Persistence provider for EntityManager
+    The most typical cases for this error are that the persistence unit name is wrong in the source code or 
+    in the persistence.xml file, or that the persistence.xml is at a wrong place or has some other problem. 
+    Make sure that the persistence unit name matches and the persistence.xml is in WEB-INF/classes/META-INF folder in the deployment.  
+    
+    In Java™ SE environments the persistence provider (Hibernate in this case) is required to locate all JPA configuration files 
+    by classpath lookup of the META-INF/persistence.xml resource name.                
+  
+Example log:  
+  
+ Info:   HttpSession supported: true
+Info:   Atmosphere is using DefaultAtmosphereObjectFactory for dependency injection and object creation
+Info:   Atmosphere is using async support: org.atmosphere.container.GlassFishServ30WebSocketSupport running under container: GlassFish Server Open Source Edition  4.0  with WebSocket enabled.
+Info:   Atmosphere Framework 2.1.2.vaadin5 started.
+Info:   Installed AtmosphereInterceptor  Track Message Size Interceptor using | with priority BEFORE_DEFAULT 
+Info:   HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+WARN:   HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+WARN:   HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+WARN:   HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+Info:   HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+Severe:   javax.persistence.PersistenceException: No Persistence provider for EntityManager named alskor.vaadin.db.jpa
+	at javax.persistence.Persistence.createEntityManagerFactory(Persistence.java:85)
+                                                   
+ 
+The JPA specification defines a bootstrap procedure to access the EntityManagerFactory and the EntityManager. The bootstrap class is javax.persistence.Persistence, e.g.
+
+EntityManagerFactory emf = Persistence.createEntityManagerFactory("manager1");
+
+//or
+
+Map<String, Object> configOverrides = new HashMap<String, Object>();
+configOverrides.put("hibernate.hbm2ddl.auto", "create-drop");
+EntityManagerFactory programmaticEmf =
+    Persistence.createEntityManagerFactory("manager1", configOverrides);     
+                                                                                                        
+EntityManager em = emf.createEntityManager(); // Retrieve an application managed entity manager
+// Work with the EM
+em.close();
+...
+emf.close(); //close at application end                                                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                          
+ -->     
+    
+    <persistence-unit name="alskor.vaadin.db.jpa">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"></property>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test" />
+            <property name="javax.persistence.jdbc.user" value="sa" />
+             <property name="hibernate.hbm2ddl.auto" value="create"/>
+        </properties>
+    </persistence-unit>
+</persistence>
