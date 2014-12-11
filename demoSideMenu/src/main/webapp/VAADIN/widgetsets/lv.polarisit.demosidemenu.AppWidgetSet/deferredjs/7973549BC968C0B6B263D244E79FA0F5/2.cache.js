@@ -1,0 +1,1 @@
+$wnd.lv_polarisit_demosidemenu_AppWidgetSet.runAsyncCallback2('lbb(1510,1,OEd);_.tc=function f5b(){CTb((!vTb&&(vTb=new HTb),vTb),this.a.d)};tyd(Uh)(2);\n//# sourceURL=lv.polarisit.demosidemenu.AppWidgetSet-2.js\n')
